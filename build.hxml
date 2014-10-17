@@ -1,0 +1,9 @@
+-js jarvis.js
+-main Jarvis
+-lib minject 
+-D minject
+-lib nodejs
+-D nodejs
+-lib yawf
+-D yawf
+--macro include('jarvis')
