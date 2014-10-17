@@ -73,7 +73,6 @@ class UsersModule extends Module
 	}
 
 
-	@requireUser
 	@name("validateSecret")
 	@prompt("^(\\w+)$")
 	public function validateSecret(secret:String):Void {
