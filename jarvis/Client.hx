@@ -227,7 +227,8 @@ class Client
 					}
 				}
 			}
-			throw "prompt not found";
+			xmpp.send(jid, "sorry, im not sure what do you want from me :(");
+			return;
 		}
 		logger.verbose("checking: '" + raw + "'");
 		for (module in modules.keys()) {
