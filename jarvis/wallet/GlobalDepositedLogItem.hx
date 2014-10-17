@@ -6,7 +6,7 @@ class GlobalDepositedLogItem extends WalletLogItem
 	private var bankerId:String;
 
 	public function new(amount:Int, userId:String, bankerId:String) {
-		super("deposited", amount, "real money deposit", bankerId);
+		super("deposited", amount, "real money deposit", userId);
 		this.bankerId = bankerId;
 	}
 

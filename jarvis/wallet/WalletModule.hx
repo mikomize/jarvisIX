@@ -46,7 +46,6 @@ class WalletModule extends Module
 			for (logItem in logItems) {
 				tmp += logItem + "\n";
 			}
-			reply("asd");
 			reply(tmp);
 		});
 	}

@@ -6,7 +6,7 @@ class GlobalWithdrawnLogItem extends WalletLogItem
 	private var bankerId:String;
 
 	public function new(amount:Int, userId:String, bankerId:String) {
-		super("transfer", amount, "real money withdraw", bankerId);
+		super("transfer", amount, "real money withdraw", userId);
 		this.bankerId = bankerId;
 	}
 
