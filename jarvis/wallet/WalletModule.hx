@@ -81,16 +81,24 @@ class WalletModule extends Module
 	}
 
 	@requireUser
-	@command("^wallet transfer (\\w+) (\\d+(?:\\.\\d{1,2})?)\\s?(.*)$")
+	@command("^wallet transfer (\\w+) (\\d{1,8}(?:\\.\\d{1,2})?)(\\s.*)?$")
 	public function transfer(userId:String, amount:Float, message:String):Void {
 		usersManager.getById(userId, function (user:User) {
 			if (user == null) {
 				reply("no such user: " + userId);
 				return;
 			}
+			if (user.id == context.user.id) {
+				reply("why do even want to do that?");
+				return;
+			}
 			walletManager.transfer(context.user.id, userId, Math.floor(amount*100), message, function (err:String, balance:Int, balance2:Int) {
-				reply("sent " + amount + " to " + userId + ", current balance: " + balance/100);
-				sendToUser(user, "You have received " + amount + " from " + context.user.id + ", your current balance is " + balance2/100);
+				if (err != null) {
+					reply(err);
+				} else {
+					reply("sent " + amount + " to " + userId + ", current balance: " + balance/100);
+					sendToUser(user, "You have received " + amount + " from " + context.user.id + " with message: '" +  message +"', your current balance is " + balance2/100);
+				}
 			});
 		});
 	}

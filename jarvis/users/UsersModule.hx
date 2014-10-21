@@ -88,7 +88,6 @@ class UsersModule extends Module
 	}
 
 	//admin stuff
-	@requireUser("admin")
 	@command("^users list$")
 	public function usersList():Void {
 		usersManager.getAll(function (users:Array<User>) {
