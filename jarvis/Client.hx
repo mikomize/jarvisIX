@@ -159,6 +159,14 @@ class Client
 
 		xmpp = Node.require("simple-xmpp");
 		setUpRedis(function():Void {
+
+			var opts:Dynamic = {
+				"jid": conf.get("jid"),
+				"password": conf.get("password"),
+				"host": conf.get("host"),
+				"port": conf.get("port")
+			};
+
 			xmpp.on("online", function(data) {
 				logger.info("conntected as: " + data.jid.local + "@" + data.jid.domain);
 				xmpp.setPresence('chat', conf.get("presence"));
@@ -178,13 +186,10 @@ class Client
 				logger.error(error);
 			});
 
-
-			var opts:Dynamic = {
-				"jid": conf.get("jid"),
-				"password": conf.get("password"),
-				"host": conf.get("host"),
-				"port": conf.get("port")
-			};
+			xmpp.on("close", function () {
+				logger.error("connection closed, reconnecting...");
+				xmpp.connect(opts);				
+			});
 
 			xmpp.connect(opts);
 			cb();
