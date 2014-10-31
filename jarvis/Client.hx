@@ -156,44 +156,46 @@ class Client
 	}
 
 	public function start(cb:Void -> Void) {
-
-		xmpp = Node.require("simple-xmpp");
 		setUpRedis(function():Void {
-
-			var opts:Dynamic = {
-				"jid": conf.get("jid"),
-				"password": conf.get("password"),
-				"host": conf.get("host"),
-				"port": conf.get("port")
-			};
-
-			xmpp.on("online", function(data) {
-				logger.info("conntected as: " + data.jid.local + "@" + data.jid.domain);
-				xmpp.setPresence('chat', conf.get("presence"));
-				xmpp.getRoster();
-			});
-
-			xmpp.on("chat", function (from, message) {
-				process(from, message);
-			});
-
-			xmpp.on("subscribe", function (from) {
-				logger.info("auto subscribing: " + from);
-				xmpp.acceptSubscription(from);
-			});
-
-			xmpp.on("error", function (error) {
-				logger.error(error);
-			});
-
-			xmpp.on("close", function () {
-				logger.error("connection closed, reconnecting...");
-				xmpp.connect(opts);				
-			});
-
-			xmpp.connect(opts);
+			initXmpp();
 			cb();
 		});
+	}
+
+	private function initXmpp() {
+		xmpp = Node.require("simple-xmpp");
+		var opts:Dynamic = {
+			"jid": conf.get("jid"),
+			"password": conf.get("password"),
+			"host": conf.get("host"),
+			"port": conf.get("port")
+		};
+
+		xmpp.on("online", function(data) {
+			logger.info("conntected as: " + data.jid.local + "@" + data.jid.domain);
+			xmpp.setPresence('chat', conf.get("presence"));
+			xmpp.getRoster();
+		});
+
+		xmpp.on("chat", function (from, message) {
+			process(from, message);
+		});
+
+		xmpp.on("subscribe", function (from) {
+			logger.info("auto subscribing: " + from);
+			xmpp.acceptSubscription(from);
+		});
+
+		xmpp.on("error", function (error) {
+			logger.error(error);
+		});
+
+		xmpp.on("close", function () {
+			logger.error("connection closed, reconnecting...");
+			initXmpp();
+		});
+
+		xmpp.connect(opts);
 	}
 
 	private function createInjector(jid:String):Injector {
