@@ -190,9 +190,8 @@ class Client
 			logger.error(error);
 		});
 
-		xmpp.on("close", function () {
-			logger.error("connection closed, reconnecting...");
-			initXmpp();
+		xmpp.on("close", function () {			
+			throw "connection closed, crashing app";
 		});
 
 		xmpp.connect(opts);
